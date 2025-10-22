@@ -1,172 +1,291 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tentang BungFerry</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tentang Saya | BungFerry</title>
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* --- GAYA DASAR --- */
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-}
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f4f7fb, #ffffff);
+      color: #333;
+      opacity: 0;
+      transition: opacity 1s ease, background 0.4s, color 0.4s;
+    }
 
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: #111;
-  color: #eee;
-  line-height: 1.7;
-  transition: background 0.4s, color 0.4s;
-}
+    body.loaded { opacity: 1; }
 
-header {
-  text-align: center;
-  padding: 60px 20px 40px;
-}
+    header {
+      text-align: center;
+      padding: 60px 20px 30px;
+      background: #e9f4ff;
+      border-bottom: 2px solid #b0d4ff;
+    }
 
-header h1 {
-  font-size: 2.5em;
-  margin-bottom: 10px;
-}
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #007acc;
+    }
 
-header p {
-  color: #aaa;
-  font-size: 1.1em;
-}
+    header p {
+      font-size: 1rem;
+      color: #555;
+    }
 
-section {
-  max-width: 800px;
-  margin: 60px auto;
-  padding: 0 20px;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1s ease, transform 1s ease;
-}
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #f8fbff;
+      border-bottom: 1px solid #d7e9ff;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
 
-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+    nav a {
+      text-decoration: none;
+      color: #007acc;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
 
-h2 {
-  font-size: 1.8em;
-  margin-bottom: 10px;
-}
+    nav a:hover { color: #005a99; }
 
-p {
-  margin-bottom: 20px;
-  color: #ccc;
-}
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.8;
+    }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 0.9em;
-  color: #aaa;
-}
+    section {
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s ease, transform 1s ease;
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
 
-/* FAB Toggle kecil melayang */
-#themeToggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #222;
-  color: #ffcd00;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  z-index: 1000;
-  transition: transform 0.2s, background 0.3s, color 0.3s;
-}
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-#themeToggle:hover {
-  transform: scale(1.15);
-}
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #007acc;
+      margin-top: 0;
+    }
 
-/* Tema terang */
-body.light {
-  background: #f9f9f9;
-  color: #222;
-}
+    .photo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
 
-body.light header p {
-  color: #555;
-}
+    .photo img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #007acc;
+      box-shadow: 0 0 10px rgba(0, 122, 204, 0.4);
+      animation: float 4s ease-in-out infinite;
+    }
 
-body.light p {
-  color: #444;
-}
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
 
-body.light #themeToggle {
-  background: #fff;
-  color: #333;
-}
-</style>
+    ul { padding-left: 20px; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #f0f8ff;
+      color: #555;
+      font-size: 0.9rem;
+      border-top: 1px solid #cde3ff;
+    }
+
+    a {
+      color: #007acc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #005a99;
+      text-decoration: underline;
+    }
+
+    /* === FAB TOGGLE === */
+    #themeToggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #007acc;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      z-index: 999;
+      transition: transform 0.3s, background 0.3s, color 0.3s;
+    }
+
+    #themeToggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* === MODE GELAP === */
+    body.dark {
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      color: #fff;
+    }
+
+    body.dark header {
+      background: #111;
+      border-bottom: 2px solid #444;
+    }
+
+    body.dark header h1 { color: #00bcd4; }
+    body.dark header p { color: #bbb; }
+    body.dark section {
+      background: #1e1e1e;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    body.dark h2 {
+      border-left-color: #00bcd4;
+      color: #00bcd4;
+    }
+    body.dark a { color: #00bcd4; }
+    body.dark a:hover { color: #fff; }
+    body.dark footer {
+      background: #111;
+      color: #aaa;
+      border-top: 1px solid #333;
+    }
+    body.dark #themeToggle {
+      background: #00bcd4;
+      color: #111;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>Tentang BungFerry</h1>
-  <p>Seorang pengembang web yang gemar bereksperimen dengan ide-ide kreatif dan inovatif.</p>
-</header>
+  <header>
+    <h1>BungFerry</h1>
+    <p>Web Developer | Desainer | Pembelajar Seumur Hidup</p>
+  </header>
 
-<section>
-  <h2>Siapa Saya?</h2>
-  <p>Halo, saya <strong>BungFerry</strong>. Saya adalah seorang pengembang web independen yang berfokus pada pembuatan antarmuka interaktif, ringan, dan responsif. Saya percaya bahwa desain yang baik bukan hanya tentang tampilan, tetapi juga pengalaman pengguna yang menyenangkan.</p>
-</section>
+  <nav>
+    <a href="#tentang">Tentang</a>
+    <a href="#keahlian">Keahlian</a>
+    <a href="#portofolio">Portofolio</a>
+    <a href="#kontak">Kontak</a>
+  </nav>
 
-<section>
-  <h2>Perjalanan Saya</h2>
-  <p>Perjalanan saya dimulai dari ketertarikan pada dunia desain digital dan pemrograman web. Seiring waktu, saya belajar berbagai bahasa pemrograman dan framework, mulai dari HTML, CSS, JavaScript, hingga teknologi modern seperti React dan Node.js.</p>
-</section>
+  <main>
+    <div class="photo">
+      <img src="https://picsum.photos/300" alt="Foto BungFerry">
+    </div>
 
-<section>
-  <h2>Visi & Misi</h2>
-  <p>Visi saya adalah menciptakan solusi digital yang tidak hanya fungsional tetapi juga inspiratif. Misi saya adalah membantu individu dan bisnis untuk menghadirkan identitas digital mereka dengan cara yang elegan dan efisien.</p>
-</section>
+    <section id="tentang">
+      <h2>Tentang Saya</h2>
+      <p>Halo! Saya <strong>BungFerry</strong>, seorang pengembang web yang berfokus pada pembuatan aplikasi berbasis web yang simpel, cepat, dan interaktif. Saya senang mempelajari teknologi baru dan selalu mencari cara untuk meningkatkan efisiensi kode serta pengalaman pengguna.</p>
+      <p>Di luar dunia coding, saya tertarik dengan desain antarmuka, eksplorasi digital, dan teknologi masa depan.</p>
+    </section>
 
-<footer>
-  © 2025 BungFerry — Semua hak cipta dilindungi.
-</footer>
+    <section id="keahlian">
+      <h2>Keahlian</h2>
+      <ul>
+        <li>HTML, CSS, dan JavaScript</li>
+        <li>Pengembangan Front-End Responsif</li>
+        <li>Desain Antarmuka (UI/UX)</li>
+        <li>Integrasi API dan Otomasi Web</li>
+      </ul>
+    </section>
 
-<!-- FAB Toggle -->
-<div id="themeToggle" title="Ganti Tema">
-  <i class="fa-solid fa-sun"></i>
-</div>
+    <section id="portofolio">
+      <h2>Proyek & Portofolio</h2>
+      <p>Saya telah mengerjakan berbagai proyek web mulai dari situs pribadi hingga aplikasi berbasis canvas dan twibbon interaktif. Beberapa karya saya dapat dilihat di halaman portofolio saya di GitHub.</p>
+      <p>🌐 <a href="https://github.com/" target="_blank">Kunjungi GitHub BungFerry</a></p>
+    </section>
 
-<script>
-// Efek fade-in scroll
-const sections = document.querySelectorAll("section");
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add("visible");
-  });
-}, { threshold: 0.2 });
-sections.forEach(section => observer.observe(section));
+    <section id="kontak">
+      <h2>Kontak</h2>
+      <p>Tertarik untuk berkolaborasi atau sekadar menyapa? Jangan ragu untuk menghubungi saya:</p>
+      <p>📧 <a href="mailto:bungferry@example.com">bungferry@example.com</a><br>
+         📱 <a href="https://wa.me/6281234567890" target="_blank">WhatsApp Saya</a></p>
+    </section>
+  </main>
 
-// Toggle tema dark/light
-const toggleBtn = document.getElementById("themeToggle");
-toggleBtn.addEventListener("click", () => {
-  document.body.classList.toggle("light");
-  const icon = toggleBtn.querySelector("i");
-  if (document.body.classList.contains("light")) {
-    icon.classList.replace("fa-sun", "fa-moon");
-  } else {
-    icon.classList.replace("fa-moon", "fa-sun");
-  }
-});
-</script>
+  <footer>
+    &copy; 2025 BungFerry — Semua Hak Dilindungi
+  </footer>
 
+  <!-- FAB TOGGLE MODE -->
+  <div id="themeToggle" title="Ganti Tema">
+    <i class="fa-solid fa-moon"></i>
+  </div>
+
+  <script>
+    // Efek fade-in
+    window.addEventListener('load', () => {
+      document.body.classList.add('loaded');
+    });
+
+    // Scroll reveal
+    const sections = document.querySelectorAll('section');
+    const revealOnScroll = () => {
+      const triggerBottom = window.innerHeight * 0.85;
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < triggerBottom) {
+          section.classList.add('visible');
+        }
+      });
+    };
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    // Toggle Tema
+    const btn = document.getElementById('themeToggle');
+    btn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const icon = btn.querySelector('i');
+      if (document.body.classList.contains('dark')) {
+        icon.classList.replace('fa-moon', 'fa-sun');
+      } else {
+        icon.classList.replace('fa-sun', 'fa-moon');
+      }
+    });
+  </script>
 </body>
 </html>

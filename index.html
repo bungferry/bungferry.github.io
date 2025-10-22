@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tentang Saya | BungFerry</title>
   <style>
-    /* Gaya dasar */
+    /* --- GAYA DASAR --- */
     * {
       box-sizing: border-box;
       scroll-behavior: smooth;
@@ -15,8 +15,8 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-      color: #fff;
+      background: linear-gradient(135deg, #f4f7fb, #ffffff);
+      color: #333;
       opacity: 0;
       transition: opacity 1s ease;
     }
@@ -28,19 +28,43 @@
     header {
       text-align: center;
       padding: 60px 20px 30px;
-      background: #111;
-      border-bottom: 2px solid #444;
+      background: #e9f4ff;
+      border-bottom: 2px solid #b0d4ff;
     }
 
     header h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
-      color: #00bcd4;
+      color: #007acc;
     }
 
     header p {
       font-size: 1rem;
-      opacity: 0.8;
+      color: #555;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #f8fbff;
+      border-bottom: 1px solid #d7e9ff;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #007acc;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #005a99;
     }
 
     main {
@@ -55,6 +79,10 @@
       opacity: 0;
       transform: translateY(40px);
       transition: opacity 1s ease, transform 1s ease;
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
 
     section.visible {
@@ -63,9 +91,10 @@
     }
 
     h2 {
-      border-left: 4px solid #00bcd4;
+      border-left: 4px solid #007acc;
       padding-left: 10px;
-      color: #00bcd4;
+      color: #007acc;
+      margin-top: 0;
     }
 
     .photo {
@@ -79,8 +108,8 @@
       height: 150px;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid #00bcd4;
-      box-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
+      border: 3px solid #007acc;
+      box-shadow: 0 0 10px rgba(0, 122, 204, 0.4);
       animation: float 4s ease-in-out infinite;
     }
 
@@ -89,27 +118,27 @@
       50% { transform: translateY(-8px); }
     }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #111;
-      color: #aaa;
-      font-size: 0.9rem;
-      border-top: 1px solid #333;
-    }
-
     ul {
       padding-left: 20px;
     }
 
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #f0f8ff;
+      color: #555;
+      font-size: 0.9rem;
+      border-top: 1px solid #cde3ff;
+    }
+
     a {
-      color: #00bcd4;
+      color: #007acc;
       text-decoration: none;
       transition: color 0.3s ease;
     }
 
     a:hover {
-      color: #fff;
+      color: #005a99;
       text-decoration: underline;
     }
   </style>
@@ -121,22 +150,29 @@
     <p>Web Developer | Desainer | Pembelajar Seumur Hidup</p>
   </header>
 
+  <nav>
+    <a href="#tentang">Tentang</a>
+    <a href="#keahlian">Keahlian</a>
+    <a href="#portofolio">Portofolio</a>
+    <a href="#kontak">Kontak</a>
+  </nav>
+
   <main>
     <div class="photo">
       <img src="https://picsum.photos/300" alt="Foto BungFerry">
     </div>
 
-    <section>
+    <section id="tentang">
       <h2>Tentang Saya</h2>
       <p>
         Halo! Saya <strong>BungFerry</strong>, seorang pengembang web yang berfokus pada pembuatan aplikasi berbasis web yang simpel, cepat, dan interaktif. Saya senang mempelajari teknologi baru dan selalu mencari cara untuk meningkatkan efisiensi kode serta pengalaman pengguna.
       </p>
       <p>
-        Selain dunia pemrograman, saya juga memiliki minat dalam desain antarmuka, fotografi, serta eksplorasi dunia digital.
+        Di luar dunia coding, saya tertarik dengan desain antarmuka, eksplorasi digital, dan teknologi masa depan.
       </p>
     </section>
 
-    <section>
+    <section id="keahlian">
       <h2>Keahlian</h2>
       <ul>
         <li>HTML, CSS, dan JavaScript</li>
@@ -146,7 +182,7 @@
       </ul>
     </section>
 
-    <section>
+    <section id="portofolio">
       <h2>Proyek & Portofolio</h2>
       <p>
         Saya telah mengerjakan berbagai proyek web mulai dari situs pribadi hingga aplikasi berbasis canvas dan twibbon interaktif. Beberapa karya saya dapat dilihat di halaman portofolio saya di GitHub.
@@ -156,7 +192,7 @@
       </p>
     </section>
 
-    <section>
+    <section id="kontak">
       <h2>Kontak</h2>
       <p>
         Tertarik untuk berkolaborasi atau sekadar menyapa? Jangan ragu untuk menghubungi saya:

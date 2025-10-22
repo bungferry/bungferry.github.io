@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tentang Saya | BungFerry</title>
   <style>
-    /* --- GAYA DASAR --- */
     * {
       box-sizing: border-box;
       scroll-behavior: smooth;
@@ -15,58 +14,115 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #f4f7fb, #ffffff);
-      color: #333;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 1s ease, background 0.5s, color 0.5s;
     }
 
     body.loaded {
       opacity: 1;
     }
 
+    /* ==== TEMA TERANG ==== */
+    body.light {
+      background: linear-gradient(135deg, #f4f7fb, #ffffff);
+      color: #333;
+    }
+
+    header.light, nav.light, footer.light {
+      background: #e9f4ff;
+      color: #333;
+    }
+
+    /* ==== TEMA GELAP ==== */
+    body.dark {
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      color: #fff;
+    }
+
+    header.dark, nav.dark, footer.dark {
+      background: #111;
+      color: #fff;
+    }
+
+    /* ==== HEADER ==== */
     header {
       text-align: center;
       padding: 60px 20px 30px;
-      background: #e9f4ff;
       border-bottom: 2px solid #b0d4ff;
+      transition: background 0.5s, color 0.5s;
     }
 
     header h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
       color: #007acc;
+      transition: color 0.5s;
+    }
+
+    body.dark header h1 {
+      color: #00bcd4;
     }
 
     header p {
       font-size: 1rem;
-      color: #555;
+      color: inherit;
+      opacity: 0.8;
     }
 
+    /* ==== NAVBAR ==== */
     nav {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 20px;
-      background: #f8fbff;
-      border-bottom: 1px solid #d7e9ff;
       padding: 10px 0;
       position: sticky;
       top: 0;
       z-index: 100;
       backdrop-filter: blur(8px);
+      border-bottom: 1px solid #cde3ff;
+      transition: background 0.5s, color 0.5s;
     }
 
     nav a {
       text-decoration: none;
-      color: #007acc;
       font-weight: 500;
+      color: #007acc;
       transition: color 0.3s ease;
     }
 
-    nav a:hover {
-      color: #005a99;
+    body.dark nav a {
+      color: #00bcd4;
     }
 
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* Tombol toggle tema */
+    .theme-toggle {
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid #007acc;
+      background: #fff;
+      color: #007acc;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    body.dark .theme-toggle {
+      background: #00bcd4;
+      color: #111;
+      border-color: #00bcd4;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    /* ==== KONTEN ==== */
     main {
       max-width: 800px;
       margin: 40px auto;
@@ -79,7 +135,7 @@
       opacity: 0;
       transform: translateY(40px);
       transition: opacity 1s ease, transform 1s ease;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 12px;
       padding: 25px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.05);
@@ -90,13 +146,25 @@
       transform: translateY(0);
     }
 
+    body.dark section {
+      background: rgba(20, 20, 20, 0.8);
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
     h2 {
       border-left: 4px solid #007acc;
       padding-left: 10px;
       color: #007acc;
       margin-top: 0;
+      transition: color 0.5s;
     }
 
+    body.dark h2 {
+      color: #00bcd4;
+      border-color: #00bcd4;
+    }
+
+    /* ==== FOTO ==== */
     .photo {
       display: flex;
       justify-content: center;
@@ -111,6 +179,12 @@
       border: 3px solid #007acc;
       box-shadow: 0 0 10px rgba(0, 122, 204, 0.4);
       animation: float 4s ease-in-out infinite;
+      transition: border-color 0.5s;
+    }
+
+    body.dark .photo img {
+      border-color: #00bcd4;
+      box-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
     }
 
     @keyframes float {
@@ -118,43 +192,47 @@
       50% { transform: translateY(-8px); }
     }
 
+    /* ==== FOOTER ==== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid #cde3ff;
+      transition: background 0.5s, color 0.5s;
+      font-size: 0.9rem;
+    }
+
     ul {
       padding-left: 20px;
     }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #f0f8ff;
-      color: #555;
-      font-size: 0.9rem;
-      border-top: 1px solid #cde3ff;
-    }
-
     a {
-      color: #007acc;
       text-decoration: none;
+      color: #007acc;
       transition: color 0.3s ease;
     }
 
+    body.dark a {
+      color: #00bcd4;
+    }
+
     a:hover {
-      color: #005a99;
       text-decoration: underline;
     }
   </style>
 </head>
-<body>
+<body class="light">
 
-  <header>
+  <header class="light">
     <h1>BungFerry</h1>
     <p>Web Developer | Desainer | Pembelajar Seumur Hidup</p>
   </header>
 
-  <nav>
+  <nav class="light">
     <a href="#tentang">Tentang</a>
     <a href="#keahlian">Keahlian</a>
     <a href="#portofolio">Portofolio</a>
     <a href="#kontak">Kontak</a>
+    <button class="theme-toggle" id="themeToggle">🌙 Mode Gelap</button>
   </nav>
 
   <main>
@@ -204,17 +282,17 @@
     </section>
   </main>
 
-  <footer>
+  <footer class="light">
     &copy; 2025 BungFerry — Semua Hak Dilindungi
   </footer>
 
   <script>
-    // Efek fade-in saat halaman dimuat
+    // Efek fade-in halaman
     window.addEventListener('load', () => {
       document.body.classList.add('loaded');
     });
 
-    // Efek scroll reveal
+    // Scroll reveal
     const sections = document.querySelectorAll('section');
     const revealOnScroll = () => {
       const triggerBottom = window.innerHeight * 0.85;
@@ -225,9 +303,30 @@
         }
       });
     };
-
     window.addEventListener('scroll', revealOnScroll);
     revealOnScroll();
+
+    // === Toggle Tema ===
+    const toggleBtn = document.getElementById('themeToggle');
+    const elements = [document.body, document.querySelector('header'), document.querySelector('nav'), document.querySelector('footer')];
+
+    toggleBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.contains('dark');
+      elements.forEach(el => {
+        el.classList.toggle('dark', !isDark);
+        el.classList.toggle('light', isDark);
+      });
+      document.body.classList.toggle('dark', !isDark);
+      document.body.classList.toggle('light', isDark);
+      toggleBtn.textContent = isDark ? '🌙 Mode Gelap' : '☀️ Mode Terang';
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
+
+    // Simpan preferensi tema di localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      toggleBtn.click();
+    }
   </script>
 
 </body>

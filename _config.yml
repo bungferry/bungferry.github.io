@@ -1,7 +1,4 @@
-title: Galeri Pribadi
-description: Kumpulan foto pribadi saya
+title: PhotoGallery
+description: Galeri pribadi saya
 baseurl: ""
 url: ""
-collections:
-  images:
-    output: true

@@ -1,24 +1,28 @@
 ---
 layout: default
+title: Home
 ---
 
- <section>
-    <div class="container">
-      <div class="header">
-        <h1 class="logo">{{ site.title }}</h1>
-        <form>
-          <input type="text" placeholder="Search">
-          <ion-icon name="search-outline"></ion-icon>
-        </form>
-      </div>
+<section>
+  <div class="container">
+    <div class="header">
+      <h1 class="logo">{{ site.title }}</h1>
+      <form>
+        <input type="text" placeholder="Search">
+        <ion-icon name="search-outline"></ion-icon>
+      </form>
+    </div>
 
-      <div class="gallery">
-          {% assign images = site.static_files | where_exp: "file", "file.path contains 'assets/images/'" %}
-  {% for image in images %}
-    <div class="item">
-      <img src="{{ image.path | relative_url }}" alt="Foto {{ forloop.index }}">
+    <div class="gallery">
+      {% assign images = site.static_files | where_exp: "file", "file.path contains 'assets/images/'" %}
+      {% for image in images %}
+        <div class="item">
+          <a href="{{ image.path | relative_url }}">
+            <img data-src="{{ image.path | relative_url }}" alt="Foto {{ forloop.index }}">
+            <h3>Photo {{ forloop.index }}</h3>
+          </a>
+        </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-      </div>
-    </div>
- </section>
+  </div>
+</section>

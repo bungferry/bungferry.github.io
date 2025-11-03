@@ -1,11 +1,357 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
   <title>{{ page.title | default: site.title }}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Font & Icon -->
+  <link rel="stylesheet" href="https://unpkg.com/css.gg/icons/all.css">
+  <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;900&display=swap");
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: "Montserrat", sans-serif;
+      font-size: 100%;
+    }
+
+    body {
+      background-color: #dbe2e9;
+      overflow-x: hidden;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform;
+      transition: opacity 0.3s ease-in-out;
+      opacity: 0;
+    }
+
+    img.loaded {
+      opacity: 1;
+    }
+
+    section {
+      min-height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 100px 0;
+    }
+
+    .container {
+      background-color: white;
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0px 0px 40px 4px rgba(94,132,156,0.25);
+      padding: 50px 20px;
+      border-radius: 20px;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    form {
+      margin-top: 30px;
+      width: 80%;
+      max-width: 300px;
+      position: relative;
+    }
+
+    input {
+      border: none;
+      border-bottom: 2px solid rgba(128, 128, 128, 0.479);
+      font-size: 20px;
+      width: 100%;
+      outline: none;
+      color: gray;
+      background-color: transparent;
+    }
+
+    input::placeholder {
+      opacity: 0.5;
+      color: gray;
+      font-family: "Montserrat";
+    }
+
+    form ion-icon {
+      position: absolute;
+      right: 0;
+      font-size: 20px;
+      opacity: 0.5;
+      color: gray;
+    }
+
+    .gallery {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      margin-top: 50px;
+      grid-gap: 20px;
+    }
+
+    .item {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      will-change: transform;
+    }
+
+    .item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .item h3 {
+      width: 100%;
+      padding: 20px;
+      position: absolute;
+      background-color: rgba(0,0,0,0.4);
+      color: aliceblue;
+      font-weight: 300;
+      transform: translateY(70px);
+      transition: transform 0.4s ease-in-out;
+      bottom: 0;
+    }
+
+    .item:hover h3 {
+      transform: translateY(0);
+    }
+
+    @media only screen and (min-width: 900px) {
+      .container {
+        max-width: 1160px;
+        padding: 100px;
+      }
+      .header {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      .header h1 {
+        font-size: 50px;
+      }
+      .header input {
+        font-size: 24px;
+      }
+      .header ion-icon {
+        font-size: 24px;
+      }
+      .gallery {
+        grid-gap: 30px;
+      }
+    }
+
+    /* Floating Card */
+    .float-text {
+      display: inline-block;
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      width: fit-content;
+      background-color: #192227;
+      color: whitesmoke;
+      font-family: "Montserrat";
+      text-transform: capitalize;
+      font-size: 15px;
+      padding: 10px 20px;
+      border-radius: 4px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.226);
+      cursor: pointer;
+      border: 1px solid white;
+      z-index: 100;
+    }
+
+    .float-card-info {
+      width: 300px;
+      position: fixed;
+      background-color: #263238;
+      border: 2px solid white;
+      overflow: hidden;
+      bottom: 5px;
+      right: -100%;
+      padding: 30px;
+      border-radius: 8px;
+      transition: right 0.5s ease-in-out;
+      z-index: 99;
+    }
+
+    .float-card-info.active {
+      right: 5px;
+    }
+
+    .float-card-info p {
+      color: white;
+      font-size: 20px;
+      font-family: "Montserrat";
+      text-transform: capitalize;
+      width: 100%;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .float-card-info .icons {
+      width: 120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+      margin-bottom: 20px;
+    }
+
+    .float-card-info .icons a {
+      display: inline-block;
+      cursor: pointer;
+      color: whitesmoke;
+      font-size: 20px;
+    }
+
+    .float-card-info .icons a:hover {
+      color: rgb(127, 127, 129);
+    }
+
+    .float-card-info .link {
+      width: 100%;
+      display: block;
+      text-decoration: none;
+      color: whitesmoke;
+      font-family: "Montserrat";
+      font-size: 14px;
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    .gg-close-r {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+
+    .float-card-info .hire {
+      background-color: #181e22;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 18px;
+      border-radius: 6px;
+      width: fit-content;
+      margin: 0 auto;
+      padding: 10px 20px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
+
 <body>
   {{ content }}
+  
+  <!--
+  <section>
+    <div class="container">
+      <div class="header">
+        <h1 class="logo">PhotoGallery</h1>
+        <form>
+          <input type="text" placeholder="Search">
+          <ion-icon name="search-outline"></ion-icon>
+        </form>
+      </div>
+
+      <div class="gallery">
+    <div class="item">
+      <a href="#"><img data-src="https://picsum.photos/400/300" alt="image"><h3>Photographer Name</h3></a>
+    </div>
+    <div class="item">
+      <a href="#"><img data-src="https://picsum.photos/400/300" alt="image"><h3>Photographer Name</h3></a>
+    </div>
+    <div class="item">
+      <a href="#"><img data-src="https://picsum.photos/400/300" alt="image"><h3>Photographer Name</h3></a>
+    </div>
+    <div class="item">
+      <a href="#"><img data-src="https://picsum.photos/400/300" alt="image"><h3>Photographer Name</h3></a>
+    </div>
+    <div class="item">
+      <a href="#"><img data-src="https://picsum.photos/400/300" alt="image"><h3>Photographer Name</h3></a>
+    </div>
+    <div class="item">
+      <a href="#"><img data-src="https://picsum.photos/400/300" alt="image"><h3>Photographer Name</h3></a>
+    </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="float-text">Info</div>
+  <div class="float-card-info">
+    <i class="gg-close-r"></i>
+    <p>Follow us</p>
+    <div class="icons">
+      <a href="#"><i class="gg-facebook"></i></a>
+      <a href="#"><i class="gg-twitter"></i></a>
+      <a href="#"><i class="gg-instagram"></i></a>
+    </div>
+    <a href="#" class="hire">Hire us</a>
+  </div>
+-->
+  
+<script>
+    // Floating card toggle (bagian ini tidak perlu diubah)
+    const touchButton = document.querySelector(".float-text");
+    const card = document.querySelector(".float-card-info");
+    const close = document.querySelector(".gg-close-r");
+
+    touchButton.addEventListener("click", () => {
+      card.classList.toggle("active");
+    });
+
+    close.addEventListener("click", () => {
+      card.classList.remove("active");
+    });
+
+    // Lazy load gambar DENGAN URL RANDOMIZER
+    const images = document.querySelectorAll('img[data-src]');
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          let imageUrl = img.getAttribute('data-src');
+          
+          // Tambahkan parameter unik (timestamp atau random number)
+          // untuk menghindari cache dan memaksa gambar random baru
+          imageUrl = imageUrl.replace("/seed/", "/"); // Hapus seed
+          imageUrl += `?random=${new Date().getTime()}`;
+
+          img.src = imageUrl;
+          img.onload = () => img.classList.add('loaded');
+          obs.unobserve(img);
+        }
+      });
+    }, { rootMargin: '100px' });
+
+    images.forEach(img => observer.observe(img));
+</script>
 </body>
 </html>

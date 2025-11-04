@@ -14,69 +14,36 @@ title: Home
     </div>
 
     <div class="gallery">
-      {% assign items = site.data.gallery_titles.items %}
-      {% assign start = paginator.page | minus: 1 | times: site.paginate %}
-      {% assign end = start | plus: site.paginate %}
-      {% assign paginated_items = items | slice: start, site.paginate %}
-
-      {% for item in paginated_items %}
+      
+      {% comment %} 
+        Iterasi data file. Urutan di YAML harus sama 
+        dengan urutan file di folder assets/images. 
+      {% endcomment %}
+      {% for item in site.data.gallery_titles.items %}
+      
+        {% comment %} 
+          image_url sekarang menggunakan nama file lengkap dari data YAML (misalnya photo2.jpg)
+        {% endcomment %}
         {% assign image_url = '/assets/images/' | append: item.filename %}
+        
         <div class="item">
+          <!-- Link href dan data-src sekarang menggunakan variabel image_url yang sama -->
           <a href="{{ image_url | relative_url }}">
-            <img data-src="{{ image_url | relative_url }}" alt="{{ item.title }}">
+            
+            <!-- Perbaikan: Menggunakan variabel image_url (bukan image_path_full) -->
+            <img  
+              data-src="{{ image_url | relative_url }}" 
+              alt="{{ item.title }}" 
+              <!-- data-title dihapus karena tidak digunakan lagi di skrip -->
+            >
+            
+            <!-- H3 menggunakan judul deskriptif dari _data/gallery_titles.yml -->
             <h3>{{ item.title }}</h3>
+            
           </a>
         </div>
       {% endfor %}
-    </div>
-
-    <div class="pagination">
-      {% if paginator.previous_page %}
-        <a href="{{ paginator.previous_page_path | relative_url }}">« Prev</a>
-      {% endif %}
-
-      {% for page in (1..paginator.total_pages) %}
-        {% if page == paginator.page %}
-          <span class="current">{{ page }}</span>
-        {% else %}
-          <a href="{{ paginator.paginate_path | replace: ':num', page | relative_url }}">{{ page }}</a>
-        {% endif %}
-      {% endfor %}
-
-      {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path | relative_url }}">Next »</a>
-      {% endif %}
+      
     </div>
   </div>
 </section>
-
-<style>
-.pagination {
-  margin-top: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  font-family: "Montserrat", sans-serif;
-}
-.pagination a, .pagination span {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 500;
-}
-.pagination a {
-  background: #192227;
-  color: #fff;
-  transition: background 0.3s;
-}
-.pagination a:hover {
-  background: #263238;
-}
-.pagination .current {
-  background: #607d8b;
-  color: white;
-  font-weight: bold;
-}
-</style>

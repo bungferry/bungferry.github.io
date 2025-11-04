@@ -76,7 +76,7 @@
   </div>
 
 <script>
-  // Tentukan URL placeholder Anda, pastikan placeholder.png ada di assets/images/
+  // Menggunakan path absolut untuk menghindari masalah filter Liquid/relative_url
   const placeholderUrl = "/assets/images/placeholder.png"; 
 
   // === FLOAT CARD ===
@@ -91,19 +91,25 @@
     
     const images = document.querySelectorAll('img[data-src]');
     
-    // Konfigurasi IntersectionObserver
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target;
-          let imageUrl = img.getAttribute('data-src');
+          const imageUrl = img.getAttribute('data-src');
 
-          // 1. Tambahkan handler error untuk logging dan placeholder
+          // 1. PASANG EVENT HANDLER SEBELUM MENGUBAH SRC
+          
+          // Handler saat gambar berhasil dimuat
+          img.onload = function() {
+              this.classList.add('loaded');
+          };
+          
+          // Handler saat gambar GAGAL dimuat
           img.onerror = function() {
               const originalSrc = this.getAttribute('data-src');
               const title = this.getAttribute('data-title') || 'Gambar ini';
               
-              // Tampilkan pesan error di konsol
+              // Logging URL yang gagal
               console.error(`[GAMBAR GAGAL MUAT] Judul: ${title} | URL Dicoba: ${originalSrc}`);
               
               // Ganti sumber gambar dengan placeholder
@@ -112,13 +118,12 @@
               // Hapus handler error untuk mencegah loop tak terbatas jika placeholder juga gagal
               this.onerror = null; 
               
-              // Masih tandai sebagai 'loaded' agar CSS opacity: 1 diterapkan
+              // Tetap tandai sebagai 'loaded' agar CSS opacity: 1 diterapkan
               this.classList.add('loaded');
           };
           
-          // 2. Muat gambar
-          img.src = imageUrl;
-          img.onload = () => img.classList.add('loaded');
+          // 2. UBAH SRC UNTUK MEMULAI PEMUATAN
+          img.src = imageUrl; 
           
           // 3. Berhenti mengamati
           obs.unobserve(img);
@@ -126,7 +131,6 @@
       });
     }, { rootMargin: '100px' });
     
-    // Mulai mengamati semua gambar
     images.forEach(img => observer.observe(img));
 
     // === FITUR PENCARIAN ===

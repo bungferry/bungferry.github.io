@@ -1,9 +1,13 @@
 items:
-  - title: "Pemandangan Musim Semi"
-  filename: "photo1.png"  
-  - title: "Full Senyum"
-  filename: "photo2.jpg"  
-  - title: "Foto Profil Unik"
-  filename: "photo3.png"  
-  - title: "Cosplay Peaky Blinders"
-  filename: "photo4.png"  
+  -
+    title: "Pemandangan Musim Semi"
+    filename: "photo1.png"
+  -
+    title: "Full Senyum"
+    filename: "photo2.jpg"
+  -
+    title: "Foto Profil Unik"
+    filename: "photo3.png"
+  -
+    title: "Cosplay Peaky Blinders"
+    filename: "photo4.png"

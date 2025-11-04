@@ -1,0 +1,24 @@
+name: 🖼️ Optimize Images
+
+on:
+  push:
+    branches:
+      - main   # Jalankan setiap kali push ke branch main
+  pull_request:
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compress images
+        uses: calibreapp/image-actions@v2.2.0
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: true
+          ignorePaths: |
+            _site/**
+            vendor/**
+            node_modules/**

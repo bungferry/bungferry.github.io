@@ -29,7 +29,7 @@ title: Home
         <div class="item">
           <!-- Link dan data-src sekarang menggunakan image_url yang benar dengan ekstensi yang sesuai -->
           <a href="{{ image_url | relative_url }}">
-            <img data-src="{{ image_url | relative_url }}" alt="{{ item.title }}">
+            <img  data-src="{{ image_path_full | relative_url }}" alt="{{ item.title }}" data-title="{{ item.title }}" >
             
             <!-- H3 menggunakan judul deskriptif dari _data/gallery_titles.yml -->
             <h3>{{ item.title }}</h3>

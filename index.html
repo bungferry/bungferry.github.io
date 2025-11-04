@@ -16,31 +16,24 @@ title: Home
     <div class="gallery">
       
       {% comment %} 
-        **PENTING: Kita mengulang data (judul), BUKAN file statis. 
-        Ini akan memastikan urutan dan kontrol judul.** 
+        Iterasi data file. Urutan di YAML harus sama 
+        dengan urutan file di folder assets/images. 
       {% endcomment %}
       {% for item in site.data.gallery_titles.items %}
       
-        {% assign photo_number = forloop.index %}
-        
         {% comment %} 
-          Asumsikan semua gambar adalah PNG. Jika ada JPG, 
-          Anda harus menambahkannya di data file dan menyesuaikannya di sini. 
+          image_url sekarang menggunakan nama file lengkap dari data YAML (misalnya photo2.jpg)
         {% endcomment %}
-        {% assign image_url = '/assets/images/photo' | append: photo_number | append: '.png' %}
+        {% assign image_url = '/assets/images/' | append: item.filename %}
         
         <div class="item">
-          <!-- Link dan data-src sekarang menggunakan URL yang dihasilkan (photo1.png, photo2.png, dst.) -->
+          <!-- Link dan data-src sekarang menggunakan image_url yang benar dengan ekstensi yang sesuai -->
           <a href="{{ image_url | relative_url }}">
             <img data-src="{{ image_url | relative_url }}" alt="{{ item.title }}">
             
             <!-- H3 menggunakan judul deskriptif dari _data/gallery_titles.yml -->
             <h3>{{ item.title }}</h3>
             
-            {% comment %} 
-              Jika Anda tetap ingin menampilkan 'Photo 1', Anda bisa melakukannya seperti ini: 
-              <h3>Photo {{ photo_number }} - {{ item.title }}</h3>
-            {% endcomment %}
           </a>
         </div>
       {% endfor %}

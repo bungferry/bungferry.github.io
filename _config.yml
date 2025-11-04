@@ -2,3 +2,5 @@ title: PhotoGallery
 description: Galeri pribadi saya
 baseurl: ""
 url: ""
+paginate: 6
+paginate_path: "/page:num"

@@ -17,7 +17,10 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html { font-family: "Montserrat", sans-serif; font-size: 100%; }
-    body { background-color: #dbe2e9; overflow-x: hidden; }
+    body { 
+      background-color: #dbe2e9; 
+      overflow: hidden; /* Sembunyikan scrollbar utama pada body */
+    }
 
     img {
       width: 100%; height: 100%; object-fit: cover;
@@ -25,9 +28,36 @@
     }
     img.loaded { opacity: 1; }
 
-    section { min-height: 100%; width: 100%; display: flex; align-items: center; justify-content: center; margin: 100px 0; }
-    .container { background-color: white; width: 90%; max-width: 900px; margin: 0 auto; box-shadow: 0px 0px 40px 4px rgba(94,132,156,0.25); padding: 50px 20px; border-radius: 20px; }
-    .header { display: flex; flex-direction: column; align-items: center; }
+    section { 
+      min-height: 100vh; /* Pastikan section mengambil seluruh tinggi viewport */
+      width: 100%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      margin: 0; /* Hapus margin agar section tidak memiliki padding tambahan di atas/bawah */
+    }
+    .container { 
+      background-color: white; 
+      width: 90%; 
+      max-width: 900px; 
+      margin: 0 auto; 
+      box-shadow: 0px 0px 40px 4px rgba(94,132,156,0.25); 
+      padding: 50px 20px; /* Padding asli Anda */
+      border-radius: 20px; 
+
+      /* Properti baru untuk membuat header tetap dan galeri scrollable */
+      height: 95vh; /* Mengambil sebagian besar tinggi viewport */
+      display: flex; 
+      flex-direction: column; 
+      overflow: hidden; /* Mencegah scrollbar muncul di container itu sendiri */
+    }
+    
+    .header { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      /* flex-shrink: 0; Hapus jika tidak diperlukan, default-nya sudah shrink */
+    }
     .header h1 { font-size: 40px; font-weight: 900; letter-spacing: -2px; }
 
     form { margin-top: 30px; width: 80%; max-width: 300px; position: relative; }
@@ -35,7 +65,37 @@
     input::placeholder { opacity: 0.5; color: gray; font-family: "Montserrat"; }
     form ion-icon { position: absolute; right: 0; font-size: 20px; opacity: 0.5; color: gray; }
 
-    .gallery { width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-top: 50px; grid-gap: 20px; }
+    /* Wrapper baru untuk galeri yang bisa di-scroll */
+    .gallery-scroll-wrapper {
+        flex-grow: 1; /* Mengambil sisa ruang vertikal yang tersedia */
+        overflow-y: auto; /* Memungkinkan scrolling vertikal */
+        padding-top: 50px; /* Sesuaikan dengan margin-top asli .gallery */
+        margin-top: -50px; /* Offset margin-top asli .gallery */
+        padding-right: 15px; /* Kompensasi lebar scrollbar yang hilang */
+
+        /* Sembunyikan scrollbar untuk WebKit browsers (Chrome, Safari, Edge, Opera) */
+        &::-webkit-scrollbar {
+            width: 0px; 
+            background: transparent; 
+        }
+        &::-webkit-scrollbar-thumb {
+            background: transparent; 
+        }
+
+        /* Sembunyikan scrollbar untuk Firefox */
+        scrollbar-width: none; 
+
+        /* Sembunyikan scrollbar untuk Internet Explorer dan Edge (versi lama) */
+        -ms-overflow-style: none; 
+    }
+
+    .gallery { 
+      width: 100%; 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+      /* margin-top: 50px; Hapus margin-top ini karena sudah dipindahkan ke .gallery-scroll-wrapper padding-top */
+      grid-gap: 20px; 
+    }
     .item { width: 100%; height: 300px; position: relative; overflow: hidden; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; will-change: transform; }
     .item:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
     .item h3 { width: 100%; padding: 20px; position: absolute; background-color: rgba(0,0,0,0.4); color: aliceblue; font-weight: 300; transform: translateY(70px); transition: transform 0.4s ease-in-out; bottom: 0; }
@@ -64,7 +124,9 @@
 </head>
 
 <body>
-  {{ content }}
+
+    {{ content }}        
+            
 <!--
   <div class="float-text">Info</div>
   <div class="float-card-info">
@@ -99,7 +161,7 @@
         if (entry.isIntersecting) {
           const img = entry.target;
           let imageUrl = img.getAttribute('data-src');
-          imageUrl += `?random=${new Date().getTime()}`; // mencegah cache
+          // imageUrl += `?random=${new Date().getTime()}`; // mencegah cache, hapus jika tidak diperlukan
           img.src = imageUrl;
 
           // === Jika gagal load gambar ===
@@ -124,6 +186,7 @@
     // === FITUR PENCARIAN ===
     const searchInput = document.querySelector("form input");
     const galleryItems = document.querySelectorAll(".gallery .item");
+    const galleryContainer = document.querySelector(".gallery");
 
     // Elemen "tidak ada hasil"
     const noResult = document.createElement("p");
@@ -133,7 +196,7 @@
     noResult.style.fontSize = "18px";
     noResult.style.marginTop = "20px";
     noResult.style.display = "none";
-    document.querySelector(".gallery").after(noResult);
+    galleryContainer.after(noResult); /* Posisikan setelah gallery */
 
     if (searchInput) {
       searchInput.addEventListener("input", function(e) {
@@ -156,4 +219,4 @@
 
 
 </body>
-</html>
+  </html>

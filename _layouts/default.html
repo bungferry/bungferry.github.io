@@ -75,10 +75,7 @@
     <a href="#" class="hire">Hire us</a>
   </div>
 
-<script>
-  // Menggunakan path absolut untuk menghindari masalah filter Liquid/relative_url
-  const placeholderUrl = "/assets/images/placeholder.png"; 
-
+  <script>
   // === FLOAT CARD ===
   const touchButton = document.querySelector(".float-text");
   const card = document.querySelector(".float-card-info");
@@ -86,51 +83,21 @@
   touchButton.addEventListener("click", () => card.classList.toggle("active"));
   close.addEventListener("click", () => card.classList.remove("active"));
 
-  // === LAZY LOAD GAMBAR DENGAN FALLBACK & LOGGING ===
+  // === LAZY LOAD GAMBAR ===
   document.addEventListener("DOMContentLoaded", function() {
-    
     const images = document.querySelectorAll('img[data-src]');
-    
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target;
-          const imageUrl = img.getAttribute('data-src');
-
-          // 1. PASANG EVENT HANDLER SEBELUM MENGUBAH SRC
-          
-          // Handler saat gambar berhasil dimuat
-          img.onload = function() {
-              this.classList.add('loaded');
-          };
-          
-          // Handler saat gambar GAGAL dimuat
-          img.onerror = function() {
-              const originalSrc = this.getAttribute('data-src');
-              const title = this.getAttribute('data-title') || 'Gambar ini';
-              
-              // Logging URL yang gagal
-              console.error(`[GAMBAR GAGAL MUAT] Judul: ${title} | URL Dicoba: ${originalSrc}`);
-              
-              // Ganti sumber gambar dengan placeholder
-              this.src = placeholderUrl;
-              
-              // Hapus handler error untuk mencegah loop tak terbatas jika placeholder juga gagal
-              this.onerror = null; 
-              
-              // Tetap tandai sebagai 'loaded' agar CSS opacity: 1 diterapkan
-              this.classList.add('loaded');
-          };
-          
-          // 2. UBAH SRC UNTUK MEMULAI PEMUATAN
-          img.src = imageUrl; 
-          
-          // 3. Berhenti mengamati
+          let imageUrl = img.getAttribute('data-src');
+          imageUrl += `?random=${new Date().getTime()}`; // Baris ini adalah bagian dari kode asli Anda
+          img.src = imageUrl;
+          img.onload = () => img.classList.add('loaded');
           obs.unobserve(img);
         }
       });
     }, { rootMargin: '100px' });
-    
     images.forEach(img => observer.observe(img));
 
     // === FITUR PENCARIAN ===

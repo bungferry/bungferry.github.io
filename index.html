@@ -14,15 +14,37 @@ title: Home
     </div>
 
     <div class="gallery">
-      {% assign images = site.static_files | where_exp: "file", "file.path contains 'assets/images/'" %}
-      {% for image in images %}
+      
+      {% comment %} 
+        **PENTING: Kita mengulang data (judul), BUKAN file statis. 
+        Ini akan memastikan urutan dan kontrol judul.** 
+      {% endcomment %}
+      {% for item in site.data.gallery_titles.items %}
+      
+        {% assign photo_number = forloop.index %}
+        
+        {% comment %} 
+          Asumsikan semua gambar adalah PNG. Jika ada JPG, 
+          Anda harus menambahkannya di data file dan menyesuaikannya di sini. 
+        {% endcomment %}
+        {% assign image_url = '/assets/images/photo' | append: photo_number | append: '.png' %}
+        
         <div class="item">
-          <a href="{{ image.path | relative_url }}">
-            <img data-src="{{ image.path | relative_url }}" alt="Foto {{ forloop.index }}">
-            <h3>Photo {{ forloop.index }}</h3>
+          <!-- Link dan data-src sekarang menggunakan URL yang dihasilkan (photo1.png, photo2.png, dst.) -->
+          <a href="{{ image_url | relative_url }}">
+            <img data-src="{{ image_url | relative_url }}" alt="{{ item.title }}">
+            
+            <!-- H3 menggunakan judul deskriptif dari _data/gallery_titles.yml -->
+            <h3>{{ item.title }}</h3>
+            
+            {% comment %} 
+              Jika Anda tetap ingin menampilkan 'Photo 1', Anda bisa melakukannya seperti ini: 
+              <h3>Photo {{ photo_number }} - {{ item.title }}</h3>
+            {% endcomment %}
           </a>
         </div>
       {% endfor %}
+      
     </div>
   </div>
 </section>

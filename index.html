@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Home
-paginate: true
 ---
 
 <section>
@@ -15,11 +14,10 @@ paginate: true
     </div>
 
     <div class="gallery">
-      {% assign all_items = site.data.gallery_titles.items %}
-      {% assign items_per_page = site.paginate | default: 6 %}
-      {% assign page_num = paginator.page | default: 1 %}
-      {% assign start_index = items_per_page | times: page_num | minus: items_per_page %}
-      {% assign paginated_items = all_items | slice: start_index, items_per_page %}
+      {% assign items = site.data.gallery_titles.items %}
+      {% assign start = paginator.page | minus: 1 | times: site.paginate %}
+      {% assign end = start | plus: site.paginate %}
+      {% assign paginated_items = items | slice: start, site.paginate %}
 
       {% for item in paginated_items %}
         {% assign image_url = '/assets/images/' | append: item.filename %}
@@ -32,10 +30,9 @@ paginate: true
       {% endfor %}
     </div>
 
-    <!-- Pagination -->
     <div class="pagination">
       {% if paginator.previous_page %}
-        <a class="prev" href="{{ paginator.previous_page_path | relative_url }}">« Prev</a>
+        <a href="{{ paginator.previous_page_path | relative_url }}">« Prev</a>
       {% endif %}
 
       {% for page in (1..paginator.total_pages) %}
@@ -47,7 +44,7 @@ paginate: true
       {% endfor %}
 
       {% if paginator.next_page %}
-        <a class="next" href="{{ paginator.next_page_path | relative_url }}">Next »</a>
+        <a href="{{ paginator.next_page_path | relative_url }}">Next »</a>
       {% endif %}
     </div>
   </div>
@@ -62,7 +59,6 @@ paginate: true
   gap: 8px;
   font-family: "Montserrat", sans-serif;
 }
-
 .pagination a, .pagination span {
   display: inline-block;
   padding: 8px 14px;
@@ -70,17 +66,14 @@ paginate: true
   text-decoration: none;
   font-weight: 500;
 }
-
 .pagination a {
   background: #192227;
   color: #fff;
   transition: background 0.3s;
 }
-
 .pagination a:hover {
   background: #263238;
 }
-
 .pagination .current {
   background: #607d8b;
   color: white;

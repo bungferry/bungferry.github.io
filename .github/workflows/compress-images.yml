@@ -2,19 +2,24 @@ name: 🖼️ Optimize Images
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
+    branches: [ main ]
 
 jobs:
-  optimize:
+  compress:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Optimize images
-        uses: stefanzweifel/image-optim-action@v3
+      - name: Optimize all images (jpg, png, gif, webp)
+        uses: docker://toy/imageoptim
         with:
-          quality: 85
-          commit_message: "🗜️ Auto-compressed images"
+          args: --directory=assets/images --quality=85
+
+      - name: Commit optimized images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/images
+          git commit -m "🗜️ Auto-compressed images" || echo "No changes to commit"
+          git push

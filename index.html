@@ -3,124 +3,47 @@ layout: default
 title: Home
 ---
 
-{% assign items = site.data.gallery_titles.items %}
-
 <section>
   <div class="container">
-    <!-- Sticky Header -->
     <div class="header">
       <h1 class="logo">{{ site.title }}</h1>
       <form>
-        <input type="text" placeholder="Cari gambar...">
+        <input type="text" placeholder="Search">
         <ion-icon name="search-outline"></ion-icon>
       </form>
     </div>
 
-    <!-- Galeri -->
     <div class="gallery">
-      {% for item in items %}
+      
+      {% comment %} 
+        Iterasi data file. Urutan di YAML harus sama 
+        dengan urutan file di folder assets/images. 
+      {% endcomment %}
+      {% for item in site.data.gallery_titles.items %}
+      
+        {% comment %} 
+          image_url sekarang menggunakan nama file lengkap dari data YAML (misalnya photo2.jpg)
+        {% endcomment %}
         {% assign image_url = '/assets/images/' | append: item.filename %}
+        
         <div class="item">
+          <!-- Link href dan data-src sekarang menggunakan variabel image_url yang sama -->
           <a href="{{ image_url | relative_url }}">
-            <img data-src="{{ image_url | relative_url }}" alt="{{ item.title }}">
+            
+            <!-- Perbaikan: Menggunakan variabel image_url (bukan image_path_full) -->
+            <img  
+              data-src="{{ image_url | relative_url }}" 
+              alt="{{ item.title }}" 
+              <!-- data-title dihapus karena tidak digunakan lagi di skrip -->
+            >
+            
+            <!-- H3 menggunakan judul deskriptif dari _data/gallery_titles.yml -->
             <h3>{{ item.title }}</h3>
+            
           </a>
         </div>
       {% endfor %}
+      
     </div>
   </div>
 </section>
-
-<style>
-/* === Layout Dasar === */
-body {
-  margin: 0;
-  font-family: "Montserrat", sans-serif;
-  background: #111;
-  color: #fff;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-}
-
-/* === Sticky Header === */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: rgba(25, 34, 39, 0.95);
-  backdrop-filter: blur(8px);
-  padding: 15px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.header .logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
-  margin: 0;
-}
-
-.header form {
-  position: relative;
-  flex: 1;
-  max-width: 300px;
-}
-
-.header input {
-  width: 100%;
-  padding: 10px 38px 10px 12px;
-  border-radius: 6px;
-  border: none;
-  background: #1c262b;
-  color: #fff;
-  font-size: 0.95rem;
-}
-
-.header ion-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #aaa;
-  font-size: 1.2rem;
-}
-
-/* === Galeri === */
-.gallery {
-  margin-top: 25px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
-}
-
-.gallery .item {
-  background: #192227;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform 0.2s ease;
-}
-
-.gallery .item:hover {
-  transform: translateY(-4px);
-}
-
-.gallery img {
-  width: 100%;
-  display: block;
-  height: auto;
-}
-
-.gallery h3 {
-  font-size: 0.9rem;
-  text-align: center;
-  margin: 8px 0 12px;
-}
-</style>

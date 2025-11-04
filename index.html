@@ -27,9 +27,15 @@ title: Home
         {% assign image_url = '/assets/images/' | append: item.filename %}
         
         <div class="item">
-          <!-- Link dan data-src sekarang menggunakan image_url yang benar dengan ekstensi yang sesuai -->
+          <!-- Link href dan data-src sekarang menggunakan variabel image_url yang sama -->
           <a href="{{ image_url | relative_url }}">
-            <img  data-src="{{ image_path_full | relative_url }}" alt="{{ item.title }}" data-title="{{ item.title }}" >
+            
+            <!-- Perbaikan: Menggunakan variabel image_url (bukan image_path_full) -->
+            <img  
+              data-src="{{ image_url | relative_url }}" 
+              alt="{{ item.title }}" 
+              <!-- data-title dihapus karena tidak digunakan lagi di skrip -->
+            >
             
             <!-- H3 menggunakan judul deskriptif dari _data/gallery_titles.yml -->
             <h3>{{ item.title }}</h3>

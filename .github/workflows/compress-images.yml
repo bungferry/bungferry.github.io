@@ -5,21 +5,27 @@ on:
     branches: [ main ]
 
 jobs:
-  compress:
+  optimize:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Optimize all images (jpg, png, gif, webp)
-        uses: docker://toy/imageoptim
+      - name: Compress images
+        uses: calibreapp/image-actions@v1.1.0
         with:
-          args: --directory=assets/images --quality=85
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: true
+          jpegQuality: 85
+          pngQuality: 85
+          ignorePaths: |
+            node_modules
+            vendor
 
       - name: Commit optimized images
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/images
-          git commit -m "🗜️ Auto-compressed images" || echo "No changes to commit"
+          git add .
+          git commit -m "🗜️ Auto-compressed images" || echo "No changes"
           git push

@@ -1,32 +1,40 @@
-name: 🖼️ Optimize Images
+name: 🖼️ Compress Jekyll Images
 
 on:
   push:
     branches:
       - main
+    paths:
+      - "assets/images/**" # hanya trigger kalau gambar berubah
 
 jobs:
-  optimize:
+  compress:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Optimize images
-        uses: xu-cheng/image-actions@v3
+      - name: Setup Node.js (Sharp CLI butuh Node)
+        uses: actions/setup-node@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          compress_only: true
-          quality: 85
-          ignore_paths: |
-            node_modules
-            vendor
-            _site
+          node-version: 18
+
+      - name: Install Sharp CLI
+        run: npm install -g sharp-cli
+
+      - name: Compress images in assets/images/
+        run: |
+          echo "🔍 Mencari dan mengompres gambar di assets/images/"
+          find assets/images -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | while IFS= read -r -d '' file; do
+            echo "🗜️ Mengompres: $file"
+            sharp "$file" --quality 80 --output "$file"
+          done
 
       - name: Commit optimized images
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "🗜️ Auto-compressed images" || echo "No changes"
+          git add assets/images || true
+          git commit -m "🗜️ Auto-compressed images with Sharp" || echo "No changes to commit"
           git push

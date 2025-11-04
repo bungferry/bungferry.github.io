@@ -76,12 +76,14 @@
   </div>
 
 <script>
+  // === FLOAT CARD ===
   const touchButton = document.querySelector(".float-text");
   const card = document.querySelector(".float-card-info");
   const close = document.querySelector(".gg-close-r");
   touchButton.addEventListener("click", () => card.classList.toggle("active"));
   close.addEventListener("click", () => card.classList.remove("active"));
 
+  // === LAZY LOAD GAMBAR ===
   document.addEventListener("DOMContentLoaded", function() {
     const images = document.querySelectorAll('img[data-src]');
     const observer = new IntersectionObserver((entries, obs) => {
@@ -97,7 +99,37 @@
       });
     }, { rootMargin: '100px' });
     images.forEach(img => observer.observe(img));
+
+    // === FITUR PENCARIAN ===
+    const searchInput = document.querySelector("form input");
+    const galleryItems = document.querySelectorAll(".gallery .item");
+
+    // Buat elemen "tidak ada hasil"
+    const noResult = document.createElement("p");
+    noResult.textContent = "Tidak ada hasil.";
+    noResult.style.textAlign = "center";
+    noResult.style.color = "gray";
+    noResult.style.fontSize = "18px";
+    noResult.style.marginTop = "20px";
+    noResult.style.display = "none";
+    document.querySelector(".gallery").after(noResult);
+
+    searchInput.addEventListener("input", function(e) {
+      const query = e.target.value.toLowerCase();
+      let found = 0;
+      galleryItems.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        if (text.includes(query)) {
+          item.style.display = "";
+          found++;
+        } else {
+          item.style.display = "none";
+        }
+      });
+      noResult.style.display = found === 0 ? "block" : "none";
+    });
   });
 </script>
+
 </body>
 </html>

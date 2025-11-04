@@ -2,7 +2,8 @@ name: 🖼️ Optimize Images
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   optimize:
@@ -11,16 +12,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compress images
-        uses: calibreapp/image-actions@v1.1.0
+      - name: Optimize images
+        uses: xu-cheng/image-actions@v3
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          compressOnly: true
-          jpegQuality: 85
-          pngQuality: 85
-          ignorePaths: |
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          compress_only: true
+          quality: 85
+          ignore_paths: |
             node_modules
             vendor
+            _site
 
       - name: Commit optimized images
         run: |

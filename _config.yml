@@ -2,5 +2,9 @@ title: PhotoGallery
 description: Galeri pribadi saya
 baseurl: ""
 url: ""
+plugins:
+  - jekyll-paginate
+
 paginate: 6
 paginate_path: "/page:num"
+

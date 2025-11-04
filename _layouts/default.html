@@ -75,36 +75,54 @@
     <a href="#" class="hire">Hire us</a>
   </div>
 
-  <script>
+<script>
   // === FLOAT CARD ===
   const touchButton = document.querySelector(".float-text");
   const card = document.querySelector(".float-card-info");
   const close = document.querySelector(".gg-close-r");
-  touchButton.addEventListener("click", () => card.classList.toggle("active"));
-  close.addEventListener("click", () => card.classList.remove("active"));
 
-  // === LAZY LOAD GAMBAR ===
+  if (touchButton && card && close) {
+    touchButton.addEventListener("click", () => card.classList.toggle("active"));
+    close.addEventListener("click", () => card.classList.remove("active"));
+  }
+
+  // === LAZY LOAD GAMBAR + FALLBACK PLACEHOLDER ===
   document.addEventListener("DOMContentLoaded", function() {
+    const placeholderUrl = "/assets/images/error.png"; // ubah sesuai lokasi placeholder kamu
     const images = document.querySelectorAll('img[data-src]');
+
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target;
           let imageUrl = img.getAttribute('data-src');
-          imageUrl += `?random=${new Date().getTime()}`; // Baris ini adalah bagian dari kode asli Anda
+          imageUrl += `?random=${new Date().getTime()}`; // mencegah cache
           img.src = imageUrl;
+
+          // === Jika gagal load gambar ===
+          img.onerror = function() {
+            console.warn(`⚠️ Gagal memuat gambar: ${imageUrl}. Menggunakan placeholder.`);
+            this.src = placeholderUrl;
+            this.onerror = null; // cegah loop error
+            this.classList.add('loaded');
+          };
+
+          // === Jika berhasil ===
           img.onload = () => img.classList.add('loaded');
+
+          // Hentikan observer untuk gambar ini
           obs.unobserve(img);
         }
       });
     }, { rootMargin: '100px' });
+
     images.forEach(img => observer.observe(img));
 
     // === FITUR PENCARIAN ===
     const searchInput = document.querySelector("form input");
     const galleryItems = document.querySelectorAll(".gallery .item");
 
-    // Buat elemen "tidak ada hasil"
+    // Elemen "tidak ada hasil"
     const noResult = document.createElement("p");
     noResult.textContent = "Tidak ada hasil.";
     noResult.style.textAlign = "center";
@@ -114,22 +132,25 @@
     noResult.style.display = "none";
     document.querySelector(".gallery").after(noResult);
 
-    searchInput.addEventListener("input", function(e) {
-      const query = e.target.value.toLowerCase();
-      let found = 0;
-      galleryItems.forEach(item => {
-        const text = item.innerText.toLowerCase();
-        if (text.includes(query)) {
-          item.style.display = "";
-          found++;
-        } else {
-          item.style.display = "none";
-        }
+    if (searchInput) {
+      searchInput.addEventListener("input", function(e) {
+        const query = e.target.value.toLowerCase();
+        let found = 0;
+        galleryItems.forEach(item => {
+          const text = item.innerText.toLowerCase();
+          if (text.includes(query)) {
+            item.style.display = "";
+            found++;
+          } else {
+            item.style.display = "none";
+          }
+        });
+        noResult.style.display = found === 0 ? "block" : "none";
       });
-      noResult.style.display = found === 0 ? "block" : "none";
-    });
+    }
   });
-  </script>
+</script>
+
 
 </body>
 </html>

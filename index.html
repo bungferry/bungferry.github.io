@@ -1,16 +1,16 @@
 ---
 layout: default
-title: Verdoank
+title: Just Another Blog
 ---
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<h1>{{ pagee.title }}</h1>
+<h1>{{ site.title }}</h1>
 
 <div id="gallery">
   {% for item in site.data.foto %}
-    <div class="img-wrap">
+    <div class="img-container">
       <img src="{{ item.url }}" loading="lazy" alt="Foto {{ forloop.index }}">
       <button class="download-btn" title="Unduh gambar">
         <i class="fa-solid fa-download"></i>
@@ -24,13 +24,24 @@ title: Verdoank
 </p>
 
 <style>
-  /* Pastikan wrapper pos relative untuk icon */
-  .img-wrap {
-    position: relative;
-    display: inline-block;
+  /* Pastikan tetap inline agar grid asli tidak berubah */
+  #gallery {
+    text-align: center;
   }
 
-  /* Tombol download */
+  .img-container {
+    position: relative;
+    display: inline-block;
+    margin: 4px;
+  }
+
+  .img-container img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Tombol unduh */
   .download-btn {
     position: absolute;
     bottom: 6px;
@@ -49,8 +60,9 @@ title: Verdoank
     transition: opacity 0.3s ease;
   }
 
-  .img-wrap:hover .download-btn,
-  .img-wrap:active .download-btn {
+  /* Muncul saat gambar disentuh atau di-hover */
+  .img-container:hover .download-btn,
+  .img-container:active .download-btn {
     opacity: 1;
   }
 
@@ -66,37 +78,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadingText = document.getElementById("loading-text");
   let loading = false;
 
-  // Fallback awal + tambahkan event unduh
-  setupExistingImages();
+  setupDownloadButtons();
+  loadRandomPicsum();
 
-  // Fungsi menyiapkan tombol unduh pada gambar yang ada
-  function setupExistingImages() {
-    document.querySelectorAll("#gallery img").forEach(img => {
+  function setupDownloadButtons() {
+    document.querySelectorAll("#gallery .img-container img").forEach(img => {
       img.onerror = () => { img.src = fallback; };
-      const wrap = img.closest(".img-wrap") || createWrapper(img);
-      if (!wrap.querySelector(".download-btn")) {
-        const btn = document.createElement("button");
-        btn.className = "download-btn";
-        btn.innerHTML = '<i class="fa-solid fa-download"></i>';
-        btn.title = "Unduh gambar";
-        btn.addEventListener("click", e => {
-          e.stopPropagation();
-          downloadImage(img.src);
-        });
-        wrap.appendChild(btn);
-      }
+      const btn = img.parentElement.querySelector(".download-btn");
+      btn.addEventListener("click", e => {
+        e.stopPropagation();
+        downloadImage(img.src);
+      });
     });
   }
 
-  function createWrapper(img) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "img-wrap";
-    img.parentNode.insertBefore(wrapper, img);
-    wrapper.appendChild(img);
-    return wrapper;
-  }
-
-  // Fungsi unduh gambar
   function downloadImage(url) {
     fetch(url)
       .then(res => res.blob())
@@ -111,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(err => console.error("Gagal mengunduh:", err));
   }
 
-  // Muat gambar acak Picsum
   function loadRandomPicsum(amount = 15) {
     if (loading) return;
     loading = true;
@@ -120,14 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       for (let i = 0; i < amount; i++) {
         const randomId = Math.floor(Math.random() * 100000);
+        const container = document.createElement("div");
+        container.className = "img-container";
+
         const img = document.createElement("img");
         img.src = `https://picsum.photos/600?random=${randomId}`;
         img.alt = `Foto acak ${randomId}`;
         img.loading = "lazy";
         img.onerror = () => { img.src = fallback; };
-
-        const wrap = document.createElement("div");
-        wrap.className = "img-wrap";
 
         const btn = document.createElement("button");
         btn.className = "download-btn";
@@ -138,17 +132,15 @@ document.addEventListener("DOMContentLoaded", () => {
           downloadImage(img.src);
         });
 
-        wrap.appendChild(img);
-        wrap.appendChild(btn);
-        gallery.appendChild(wrap);
+        container.appendChild(img);
+        container.appendChild(btn);
+        gallery.appendChild(container);
       }
+
       loading = false;
       loadingText.style.display = "none";
-    }, 1000);
+    }, 800);
   }
-
-  // Load awal
-  loadRandomPicsum();
 
   // Infinite scroll
   window.addEventListener("scroll", () => {

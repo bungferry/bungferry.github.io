@@ -20,49 +20,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const gallery = document.getElementById("gallery");
   const fallback = "{{ '/assets/placeholder.jpg' | relative_url }}";
   const loadingText = document.getElementById("loading-text");
-  let count = 0;
   let loading = false;
 
-  // Fallback untuk gambar dari data YAML (site.data.foto)
+  // Fallback untuk gambar YAML
   gallery.querySelectorAll("img").forEach(img => {
     img.onerror = () => { img.src = fallback; };
   });
 
-  // Fungsi untuk memuat gambar Picsum baru
-  function loadPicsumImages(amount = 15) {
+  // Fungsi memuat gambar acak dari Picsum
+  function loadRandomPicsum(amount = 15) {
     if (loading) return;
     loading = true;
     loadingText.style.display = "block";
 
     setTimeout(() => {
       for (let i = 0; i < amount; i++) {
-        const seed = count + i + 1;
+        const randomId = Math.floor(Math.random() * 100000);
         const img = document.createElement("img");
-        img.src = `https://picsum.photos/seed/${seed}/600`;
-        img.alt = `Foto ${seed}`;
+        img.src = `https://picsum.photos/600?random=${randomId}`;
+        img.alt = `Foto acak ${randomId}`;
         img.loading = "lazy";
         img.onerror = () => { img.src = fallback; };
 
         const link = document.createElement("a");
-        link.href = `https://picsum.photos/seed/${seed}/1200`;
+        link.href = `https://picsum.photos/1200?random=${randomId}`;
         link.target = "_blank";
         link.appendChild(img);
 
         gallery.appendChild(link);
       }
-      count += amount;
+
       loading = false;
       loadingText.style.display = "none";
-    }, 1000); // sedikit delay biar efek "memuat" terasa
+    }, 1000);
   }
 
   // Load awal
-  loadPicsumImages();
+  loadRandomPicsum();
 
-  // Infinite scroll: muat gambar baru saat hampir mencapai bawah halaman
+  // Infinite scroll
   window.addEventListener("scroll", () => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 800) {
-      loadPicsumImages();
+      loadRandomPicsum();
     }
   });
 });

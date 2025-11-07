@@ -5,6 +5,55 @@ title: Just Another Blog
 
 <h1>{{ site.title }}</h1>
 
-{% for item in site.data.foto %}
-  <img src="{{ item.url }}" loading="lazy" alt="Foto {{ forloop.index }}">
-{% endfor %}
+<div id="gallery">
+  {% for item in site.data.foto %}
+    <img src="{{ item.url }}" loading="lazy" alt="Foto {{ forloop.index }}">
+  {% endfor %}
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const gallery = document.getElementById("gallery");
+  const fallback = "{{ '/assets/images/error.png' | relative_url }}";
+  let count = 0;
+  let loading = false;
+
+  // Fallback untuk gambar dari data YAML (site.data.foto)
+  gallery.querySelectorAll("img").forEach(img => {
+    img.onerror = () => { img.src = fallback; };
+  });
+
+  // Fungsi untuk menambah gambar dari Picsum otomatis
+  function loadPicsumImages(amount = 15) {
+    if (loading) return;
+    loading = true;
+    for (let i = 0; i < amount; i++) {
+      const seed = count + i + 1;
+      const img = document.createElement("img");
+      img.src = `https://picsum.photos/seed/${seed}/600`;
+      img.alt = `Foto ${seed}`;
+      img.loading = "lazy";
+      img.onerror = () => { img.src = fallback; };
+
+      const link = document.createElement("a");
+      link.href = `https://picsum.photos/seed/${seed}/1200`;
+      link.target = "_blank";
+      link.appendChild(img);
+
+      gallery.appendChild(link);
+    }
+    count += amount;
+    loading = false;
+  }
+
+  // Load awal beberapa gambar picsum
+  loadPicsumImages();
+
+  // Infinite scroll: tambah gambar baru saat mendekati bawah halaman
+  window.addEventListener("scroll", () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 800) {
+      loadPicsumImages();
+    }
+  });
+});
+</script>

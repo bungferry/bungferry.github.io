@@ -11,10 +11,15 @@ title: Just Another Blog
   {% endfor %}
 </div>
 
+<p id="loading-text" style="text-align:center; font-family:sans-serif; color:#999; display:none; margin:30px 0;">
+  Memuat lebih banyak...
+</p>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const gallery = document.getElementById("gallery");
-  const fallback = "{{ '/assets/images/error.png' | relative_url }}";
+  const fallback = "{{ '/assets/placeholder.jpg' | relative_url }}";
+  const loadingText = document.getElementById("loading-text");
   let count = 0;
   let loading = false;
 
@@ -23,33 +28,38 @@ document.addEventListener("DOMContentLoaded", () => {
     img.onerror = () => { img.src = fallback; };
   });
 
-  // Fungsi untuk menambah gambar dari Picsum otomatis
+  // Fungsi untuk memuat gambar Picsum baru
   function loadPicsumImages(amount = 15) {
     if (loading) return;
     loading = true;
-    for (let i = 0; i < amount; i++) {
-      const seed = count + i + 1;
-      const img = document.createElement("img");
-      img.src = `https://picsum.photos/seed/${seed}/600`;
-      img.alt = `Foto ${seed}`;
-      img.loading = "lazy";
-      img.onerror = () => { img.src = fallback; };
+    loadingText.style.display = "block";
 
-      const link = document.createElement("a");
-      link.href = `https://picsum.photos/seed/${seed}/1200`;
-      link.target = "_blank";
-      link.appendChild(img);
+    setTimeout(() => {
+      for (let i = 0; i < amount; i++) {
+        const seed = count + i + 1;
+        const img = document.createElement("img");
+        img.src = `https://picsum.photos/seed/${seed}/600`;
+        img.alt = `Foto ${seed}`;
+        img.loading = "lazy";
+        img.onerror = () => { img.src = fallback; };
 
-      gallery.appendChild(link);
-    }
-    count += amount;
-    loading = false;
+        const link = document.createElement("a");
+        link.href = `https://picsum.photos/seed/${seed}/1200`;
+        link.target = "_blank";
+        link.appendChild(img);
+
+        gallery.appendChild(link);
+      }
+      count += amount;
+      loading = false;
+      loadingText.style.display = "none";
+    }, 1000); // sedikit delay biar efek "memuat" terasa
   }
 
-  // Load awal beberapa gambar picsum
+  // Load awal
   loadPicsumImages();
 
-  // Infinite scroll: tambah gambar baru saat mendekati bawah halaman
+  // Infinite scroll: muat gambar baru saat hampir mencapai bawah halaman
   window.addEventListener("scroll", () => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 800) {
       loadPicsumImages();

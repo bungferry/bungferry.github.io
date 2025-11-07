@@ -5,7 +5,14 @@
   <meta name="viewport" content="width=device-width">
   <title>{{ page.title }} | {{ site.title }}</title>
   <link href="https://fonts.googleapis.com/css?family=Raleway:400,800" rel="stylesheet">
+
   <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+
     h1 {
         text-transform: uppercase;
         color: black;
@@ -16,26 +23,61 @@
         padding-bottom: 1.25%;
         width: 30%;
     }
+
     img {
         width: 30%;
         margin: 1.25% 1.25%;
+        object-fit: cover;
+        background: #eee;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+        border-radius: 6px;
     }
-    p {
-        margin: 1.25% 1.25%;
+
+    img:hover {
+        transform: scale(1.03);
+        opacity: 0.95;
     }
-    @media screen and (min-width: 700px) {
-        img:nth-of-type(3n+1) { margin-left: 2.5%; }
+
+    @media screen and (min-width: 700px)
+    {
+        img:nth-of-type(3n+1) { 
+            margin-left: 2.5%;
+        }
     }
-    @media screen and (max-width: 700px) {
-        img:nth-of-type(2n+1) { margin-left: 3.3%; }
-        img { width: 45%; margin: 1.65% 1.65%; }
-        h1 { width: 45%; margin-left: 3.3%; }
+
+    @media screen and (max-width: 700px)
+    {
+        img:nth-of-type(2n+1) { 
+            margin-left: 3.3%;
+        }
+        img { 
+            width: 45%;
+            margin: 1.65% 1.65%;
+        }
+        h1 {
+            width: 45%;
+            margin-left: 3.3%;
+        }
     }
   </style>
 </head>
 <body>
 
   {{ content }}
+
+  <script>
+    // Cegah gambar rusak dengan fallback otomatis
+    document.addEventListener("DOMContentLoaded", function() {
+      const fallbackSrc = "{{ '/assets/images/error.png' | relative_url }}";
+
+      document.querySelectorAll("img").forEach(img => {
+        img.addEventListener("error", function() {
+          console.warn("Gagal memuat gambar:", img.src);
+          img.src = fallbackSrc;
+        });
+      });
+    });
+  </script>
 
 </body>
 </html>

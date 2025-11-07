@@ -1,6 +1,6 @@
-title: PhotoGallery
-description: Galeri pribadi saya
+title: Just Another Blog
+description: Galeri foto sederhana pakai Jekyll
 baseurl: ""
-url: ""
-
-
+url: "https://verdoank.pages.dev/"
+theme: null
+markdown: kramdown

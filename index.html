@@ -1,13 +1,21 @@
 ---
 layout: default
-title: Verdoank
+title: Just Another Blog
 ---
 
-<h1>{{ page.title }}</h1>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<h1>{{ site.title }}</h1>
 
 <div id="gallery">
   {% for item in site.data.foto %}
-    <img src="{{ item.url }}" loading="lazy" alt="Foto {{ forloop.index }}">
+    <div class="img-wrap">
+      <img src="{{ item.url }}" loading="lazy" alt="Foto {{ forloop.index }}">
+      <button class="download-btn" title="Unduh gambar">
+        <i class="fa-solid fa-download"></i>
+      </button>
+    </div>
   {% endfor %}
 </div>
 
@@ -15,19 +23,95 @@ title: Verdoank
   Memuat lebih banyak...
 </p>
 
+<style>
+  /* Pastikan wrapper pos relative untuk icon */
+  .img-wrap {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Tombol download */
+  .download-btn {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .img-wrap:hover .download-btn,
+  .img-wrap:active .download-btn {
+    opacity: 1;
+  }
+
+  .download-btn i {
+    font-size: 16px;
+  }
+</style>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const gallery = document.getElementById("gallery");
-  const fallback = "{{ '/assets/images/error.png' | relative_url }}";
+  const fallback = "{{ '/assets/placeholder.jpg' | relative_url }}";
   const loadingText = document.getElementById("loading-text");
   let loading = false;
 
-  // Fallback untuk gambar YAML
-  gallery.querySelectorAll("img").forEach(img => {
-    img.onerror = () => { img.src = fallback; };
-  });
+  // Fallback awal + tambahkan event unduh
+  setupExistingImages();
 
-  // Fungsi memuat gambar acak dari Picsum
+  // Fungsi menyiapkan tombol unduh pada gambar yang ada
+  function setupExistingImages() {
+    document.querySelectorAll("#gallery img").forEach(img => {
+      img.onerror = () => { img.src = fallback; };
+      const wrap = img.closest(".img-wrap") || createWrapper(img);
+      if (!wrap.querySelector(".download-btn")) {
+        const btn = document.createElement("button");
+        btn.className = "download-btn";
+        btn.innerHTML = '<i class="fa-solid fa-download"></i>';
+        btn.title = "Unduh gambar";
+        btn.addEventListener("click", e => {
+          e.stopPropagation();
+          downloadImage(img.src);
+        });
+        wrap.appendChild(btn);
+      }
+    });
+  }
+
+  function createWrapper(img) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "img-wrap";
+    img.parentNode.insertBefore(wrapper, img);
+    wrapper.appendChild(img);
+    return wrapper;
+  }
+
+  // Fungsi unduh gambar
+  function downloadImage(url) {
+    fetch(url)
+      .then(res => res.blob())
+      .then(blob => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "gambar.jpg";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      })
+      .catch(err => console.error("Gagal mengunduh:", err));
+  }
+
+  // Muat gambar acak Picsum
   function loadRandomPicsum(amount = 15) {
     if (loading) return;
     loading = true;
@@ -41,9 +125,23 @@ document.addEventListener("DOMContentLoaded", () => {
         img.alt = `Foto acak ${randomId}`;
         img.loading = "lazy";
         img.onerror = () => { img.src = fallback; };
-        gallery.appendChild(img);
-      }
 
+        const wrap = document.createElement("div");
+        wrap.className = "img-wrap";
+
+        const btn = document.createElement("button");
+        btn.className = "download-btn";
+        btn.title = "Unduh gambar";
+        btn.innerHTML = '<i class="fa-solid fa-download"></i>';
+        btn.addEventListener("click", e => {
+          e.stopPropagation();
+          downloadImage(img.src);
+        });
+
+        wrap.appendChild(img);
+        wrap.appendChild(btn);
+        gallery.appendChild(wrap);
+      }
       loading = false;
       loadingText.style.display = "none";
     }, 1000);

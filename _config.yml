@@ -3,4 +3,3 @@ description: Galeri foto sederhana pakai Jekyll
 baseurl: ""
 url: "https://verdoank.pages.dev/"
 theme: null
-markdown: kramdown

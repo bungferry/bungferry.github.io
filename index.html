@@ -1,49 +1,14 @@
 ---
 layout: default
-title: Home
+title: Just Another Blog
 ---
 
-<section>
-  <div class="container">
-    <div class="header">
-      <h1 class="logo">{{ site.title }}</h1>
-      <form>
-        <input type="text" placeholder="Search">
-        <ion-icon name="search-outline"></ion-icon>
-      </form>
-    </div>
+<h1>{{ site.title }}</h1>
 
-    <div class="gallery">
-      
-      {% comment %} 
-        Iterasi data file. Urutan di YAML harus sama 
-        dengan urutan file di folder assets/images. 
-      {% endcomment %}
-      {% for item in site.data.gallery_titles.items %}
-      
-        {% comment %} 
-          image_url sekarang menggunakan nama file lengkap dari data YAML (misalnya photo2.jpg)
-        {% endcomment %}
-        {% assign image_url = '/assets/images/' | append: item.filename %}
-        
-        <div class="item">
-          <!-- Link href dan data-src sekarang menggunakan variabel image_url yang sama -->
-          <a href="{{ image_url | relative_url }}">
-            
-            <!-- Perbaikan: Menggunakan variabel image_url (bukan image_path_full) -->
-            <img  
-              data-src="{{ image_url | relative_url }}" 
-              alt="{{ item.title }}" 
-              <!-- data-title dihapus karena tidak digunakan lagi di skrip -->
-            >
-            
-            <!-- H3 menggunakan judul deskriptif dari _data/gallery_titles.yml -->
-            <h3>{{ item.title }}</h3>
-            
-          </a>
-        </div>
-      {% endfor %}
-      
-    </div>
-  </div>
-</section>
+{% for post in site.posts %}
+  {% if post.image %}
+    <a href="{{ post.url | relative_url }}">
+      <img src="{{ post.image }}" alt="{{ post.title }}">
+    </a>
+  {% endif %}
+{% endfor %}

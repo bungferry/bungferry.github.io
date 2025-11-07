@@ -18,7 +18,7 @@ title: Just Another Blog
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const gallery = document.getElementById("gallery");
-  const fallback = "{{ '/assets/placeholder.jpg' | relative_url }}";
+  const fallback = "{{ '/assets/images/error.png' | relative_url }}";
   const loadingText = document.getElementById("loading-text");
   let loading = false;
 
@@ -41,13 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         img.alt = `Foto acak ${randomId}`;
         img.loading = "lazy";
         img.onerror = () => { img.src = fallback; };
-
-        const link = document.createElement("a");
-        link.href = `https://picsum.photos/1200?random=${randomId}`;
-        link.target = "_blank";
-        link.appendChild(img);
-
-        gallery.appendChild(link);
+        gallery.appendChild(img);
       }
 
       loading = false;
